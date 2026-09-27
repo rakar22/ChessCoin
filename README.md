@@ -33,6 +33,18 @@ This release deliberately keeps **real-money wagering and real crypto transfers 
 8. On-chain rewards only after product/legal review
 9. Admin dashboard, moderation and analytics
 
+## Realtime server
+
+A WebSocket server is included in `server/` for authoritative 1v1 rooms. It is intentionally separated from the static frontend so the same UI can run locally without a backend. Set `VITE_MULTIPLAYER_URL` to the deployed WebSocket endpoint when connecting the production client.
+
+```bash
+cd server
+npm install
+npm start
+```
+
+The server currently handles room creation/joining, turn validation, legal moves and disconnect handling. Production deployment should add authenticated Telegram sessions, persistent storage, rate limits, anti-cheat controls and server-side clocks before real competitive rewards are enabled.
+
 ## Development
 
 ```bash
