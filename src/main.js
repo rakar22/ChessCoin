@@ -81,7 +81,7 @@ clocks.w+=MODES[mode].increment;renderBoard();render();startTimer();
 }
 function finish(kind){
 over=true;stopTimer();
-if(kind==="win"){profile.wins++;profile.streak++;profile.coins+=mode==="bullet"?15:mode==="blitz"?20:25;profile.rating+=8;result="Victory — +${mode==="bullet"?15:mode==="blitz"?20:25} coins"}
+if(kind==="win"){profile.wins++;profile.streak++;profile.coins+=mode==="bullet"?15:mode==="blitz"?20:25;profile.rating+=8;result="Victory — +"+(mode==="bullet"?15:mode==="blitz"?20:25)+" coins"}
 else if(kind==="loss"){profile.losses++;profile.streak=0;profile.rating=Math.max(100,profile.rating-8);result="Defeat — keep playing"}
 else{profile.draws++;profile.coins+=5;result="Draw — +5 coins"}
 save();render();
