@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f1115" />
+    <meta name="description" content="ChessCoin — minimalist chess for Telegram." />
+    <title>ChessCoin — Minimal Chess</title>
+  </head>
+  <body>
+    <main id="app">
+      <header class="topbar">
+        <div class="brand"><span class="brand-mark">♞</span><span>ChessCoin</span></div>
+        <div class="top-actions">
+          <button class="icon-btn" id="newGameBtn" aria-label="New game">＋</button>
+          <button class="wallet-btn" id="walletBtn">Connect wallet</button>
+        </div>
+      </header>
+
+      <section class="game-shell" aria-label="Chess game">
+        <div class="player-row opponent">
+          <div class="player">
+            <div class="avatar">C</div>
+            <div><strong>Opponent</strong><span class="sub">Black</span></div>
+          </div>
+          <div class="clock" id="blackClock">05:00</div>
+        </div>
+
+        <div class="board-wrap">
+          <div id="board" class="board" role="grid" aria-label="Chess board"></div>
+        </div>
+
+        <div class="player-row you">
+          <div class="player">
+            <div class="avatar you-avatar">Y</div>
+            <div><strong>You</strong><span class="sub">White</span></div>
+          </div>
+          <div class="clock active" id="whiteClock">05:00</div>
+        </div>
+
+        <div class="game-status" id="status" aria-live="polite">Your turn</div>
+
+        <div class="actions">
+          <button class="secondary" id="drawBtn">Offer draw</button>
+          <button class="danger" id="resignBtn">Resign</button>
+        </div>
+
+        <section class="moves-card">
+          <div class="section-title"><span>Moves</span><span id="moveCount">0</span></div>
+          <div id="moves" class="moves"></div>
+        </section>
+      </section>
+
+      <nav class="bottom-nav" aria-label="Navigation">
+        <button class="nav-item active"><span>♟</span><small>Play</small></button>
+        <button class="nav-item"><span>♛</span><small>Ranking</small></button>
+        <button class="nav-item"><span>◉</span><small>Profile</small></button>
+      </nav>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
