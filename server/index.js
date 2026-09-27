@@ -43,7 +43,9 @@ if(m.type==="move"){
 if(room.status!=="playing")return;
 if(room.game.turn()!==player.color){send(ws,{type:"error",message:"Not your turn"});return}
 try{
+const before=room.game.turn();
 room.game.move({from:m.from,to:m.to,promotion:m.promotion||"q"});
+if(before!==player.color)throw new Error("Not your turn");
 if(room.game.isGameOver())room.status="finished";
 broadcast(room,snapshot(room));
 }catch{send(ws,{type:"error",message:"Illegal move"})}
@@ -58,4 +60,6 @@ room.players=room.players.filter(p=>p!==player);
 if(room.players.length===0)rooms.delete(room.id);else{room.status="finished";broadcast(room,{...snapshot(room),type:"opponent_left"})}
 });
 });
+
+setInterval(()=>{for(const room of rooms.values()){if(room.status!=="playing")continue;const color=room.game.turn();room.clocks[color]--;if(room.clocks[color]<=0){room.status="finished";room.winner=color==="w"?"b":"w";broadcast(room,{...snapshot(room),type:"timeout",winner:room.winner})}}},1000);
 server.listen(PORT,()=>console.log(`ChessCoin server listening on :${PORT}`));
