@@ -1,0 +1,10 @@
+{
+  "commands":[
+    {"command":"start","description":"Open ChessCoin"},
+    {"command":"play","description":"Play chess"},
+    {"command":"match","description":"Find an opponent"},
+    {"command":"tournaments","description":"View tournaments"},
+    {"command":"profile","description":"Open your profile"},
+    {"command":"help","description":"Show help"}
+  ]
+}
