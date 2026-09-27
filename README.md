@@ -54,3 +54,29 @@ npm run build
 ```
 
 The app is currently designed to remain usable without a backend, so the local chess experience works immediately.
+
+
+## Production backend modules
+
+The repository now includes backend modules for:
+
+- Telegram Mini App init-data verification
+- player profiles and server-side store abstraction
+- automatic matchmaking queue
+- private realtime rooms
+- tournament creation/joining
+- server-side game clocks
+- WebSocket move validation
+- Docker deployment
+
+### Telegram setup
+
+Set `TELEGRAM_BOT_TOKEN` on the backend. The frontend detects the Telegram WebApp SDK and sends `initData` to the backend for verification.
+
+### Matchmaking
+
+The Play screen exposes **Find match**, which uses the realtime queue when `VITE_MULTIPLAYER_URL` is configured.
+
+### Security boundary
+
+No wallet private keys, seed phrases or payment credentials belong in this application. TON Connect should only be used for public wallet connection/signing, and any real-value reward system must be implemented server-side with appropriate legal, fraud and custody controls.
