@@ -67,7 +67,7 @@ if(piece)el.innerHTML=`<span class="piece ${piece.color}">${PIECES[piece.color][
 el.onclick=()=>squareClick(sq);b.appendChild(el);
 }));
 }
-function applyOnlineState(s){if(!s?.fen)return;game=new Chess(s.fen);onlineState=s;selected=null;targets=[];renderBoard();const st=document.querySelector("#status");if(st)st.textContent=s.status==="waiting"?"Waiting for opponent…":game.turn()==="w"?"White to move":"Black to move";}\nfunction telegramInit(){try{return window.Telegram?.WebApp?.initData||""}catch{return""}}\nfunction connectOnline(){if(online)return true;const client=createRealtimeClient({onHello:()=>setOnlineStatus("Connected"),onRoom:m=>{onlineRoom=m.room;onlineColor=m.color;setOnlineStatus("Room "+m.room+" · "+m.color.toUpperCase())},onState:applyOnlineState,onError:m=>{setOnlineStatus(m);online=null}});if(!client){setOnlineStatus("Set VITE_MULTIPLAYER_URL to enable online play");return false}online=client;return true}\nfunction setOnlineStatus(s){const el=document.querySelector("#onlineStatus");if(el)el.textContent=s}\nfunction squareClick(sq){
+function applyOnlineState(s){if(!s?.fen)return;game=new Chess(s.fen);onlineState=s;selected=null;targets=[];renderBoard();const st=document.querySelector("#status");if(st)st.textContent=s.status==="waiting"?"Waiting for opponent…":game.turn()==="w"?"White to move":"Black to move";}\nfunction telegramInit(){try{return window.Telegram?.WebApp?.initData||""}catch{return""}}\nfunction connectOnline(){if(online)return true;const client=createRealtimeClient({onHello:()=>setOnlineStatus("Connected"),onRoom:m=>{onlineRoom=m.room;onlineColor=m.color;setOnlineStatus("Room "+m.room+" · "+m.color.toUpperCase())},onState:applyOnlineState,onError:m=>{setOnlineStatus(m);online=null}});if(!client){setOnlineStatus("Set VITE_MULTIPLAYER_URL to enable online play");return false}online=client;return true}\nasync function loadLeaderboard(){try{const base=import.meta.env.VITE_API_URL||"";if(!base)return;const r=await fetch(base+"/api/leaderboard");if(!r.ok)return;const d=await r.json();window.chesscoinLeaderboard=d.items||[]}catch{}}\nfunction setOnlineStatus(s){const el=document.querySelector("#onlineStatus");if(el)el.textContent=s}\nfunction squareClick(sq){
 if(over||game.turn()!=="w")return;
 if(selected&&targets.includes(sq)){
 try{game.move({from:selected,to:sq,promotion:"q"});profile.games++;selected=null;targets=[];afterMove();return}catch{}
@@ -78,7 +78,7 @@ renderBoard();
 }
 function afterMove(){
 if(game.isGameOver()){finish(game.isCheckmate()?(game.turn()==="w"?"loss":"win"):"draw");return}
-clocks.w+=MODES[mode].increment;renderBoard();if(window.Telegram?.WebApp){window.Telegram.WebApp.ready();window.Telegram.WebApp.expand()}\nrender();startTimer();
+clocks.w+=MODES[mode].increment;renderBoard();if(window.Telegram?.WebApp){window.Telegram.WebApp.ready();window.Telegram.WebApp.expand()}\nloadLeaderboard();render();startTimer();
 }
 function finish(kind){
 over=true;stopTimer();
@@ -111,7 +111,7 @@ document.querySelector("#challenge")?.addEventListener("click",()=>{const code=M
 renderBoard();
 }
 function rankScreen(){
-const players=[["KnightZero",1512],["QueenBee",1468],["RookMaster",1395],["ChessFox",1322],["PawnStorm",1288],[profile.name,profile.rating]].sort((a,b)=>b[1]-a[1]);
+const apiPlayers=window.chesscoinLeaderboard||[];const players=(apiPlayers.length?apiPlayers.map(x=>[x.name,x.rating]):[["KnightZero",1512],["QueenBee",1468],["RookMaster",1395],["ChessFox",1322],["PawnStorm",1288]]).concat([[profile.name,profile.rating]]).sort((a,b)=>b[1]-a[1]).slice(0,10);
 return `<main class="page"><div class="section-hero"><span class="eyebrow">LEADERBOARD</span><h2>Global ranking</h2><p>Climb by winning rated games.</p></div><div class="leaderboard">${players.map((p,i)=>`<div class="rank-row ${p[0]===profile.name?"me-row":""}"><span class="pos">${i+1}</span><div class="rank-avatar">${esc(p[0][0])}</div><strong>${esc(p[0])}</strong><span>${p[1]}</span></div>`).join("")}</div><div class="notice"><b>ELO</b><span>Rated results are stored locally in this release; online account sync comes in the multiplayer backend.</span></div></main>`;
 }
 function profileScreen(){
