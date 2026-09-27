@@ -14,7 +14,7 @@ function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",
 function fmt(sec){sec=Math.max(0,sec);return String(Math.floor(sec/60)).padStart(2,"0")+":"+String(sec%60).padStart(2,"0")}
 function avatar(){return esc((profile.name||"P").slice(0,1).toUpperCase())}
 function nav(){
-return `<nav class="nav"><button class="nav-item ${screen==="play"?"active":""}" data-screen="play"><b>♟</b><span>Play</span></button><button class="nav-item ${screen==="rank":""}" data-screen="rank"><b>♛</b><span>Ranking</span></button><button class="nav-item ${screen==="profile"?"active":""}" data-screen="profile"><b>◉</b><span>Profile</span></button></nav>`;
+return `<nav class="nav"><button class="nav-item ${screen==="play"?"active":""}" data-screen="play"><b>♟</b><span>Play</span></button><button class="nav-item ${screen==="rank"?"active":""}" data-screen="rank"><b>♛</b><span>Ranking</span></button><button class="nav-item ${screen==="profile"?"active":""}" data-screen="profile"><b>◉</b><span>Profile</span></button></nav>`;
 }
 function header(){
 return `<header class="topbar"><button class="brand" data-screen="play"><span>♞</span><strong>ChessCoin</strong></button><div class="top-actions"><span class="coins">◈ ${profile.coins}</span><button class="wallet" id="wallet">Connect wallet</button></div></header>`;
