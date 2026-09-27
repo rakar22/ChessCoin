@@ -5,6 +5,7 @@ import { getUser, saveUser, snapshot as storeSnapshot } from "./store.js";
 import { verifyTelegramInitData } from "./auth.js";
 import { enqueue, remove, size as queueSize } from "./matchmaking.js";
 import { createTournament, joinTournament, listTournaments } from "./tournaments.js";
+import { handleApi } from "./api.js";
 
 const PORT=process.env.PORT||8080;
 const rooms=new Map();
