@@ -1,0 +1,63 @@
+:root {
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #f5f6f7;
+  background: #0f1115;
+  font-synthesis: none;
+  --bg: #0f1115;
+  --panel: #171a20;
+  --panel-2: #1d2129;
+  --line: #2a2f38;
+  --muted: #8d95a3;
+  --light: #e8e4da;
+  --dark: #8c887d;
+  --accent: #f2c94c;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+button { font: inherit; }
+#app { min-height: 100vh; display: flex; flex-direction: column; }
+.topbar { height: 64px; padding: 0 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 9px; font-weight: 700; letter-spacing: -.02em; }
+.brand-mark { font-size: 22px; color: var(--accent); }
+.top-actions { display: flex; gap: 8px; align-items: center; }
+.icon-btn, .wallet-btn, .secondary, .danger { border: 1px solid var(--line); background: var(--panel); color: #fff; border-radius: 12px; cursor: pointer; }
+.icon-btn { width: 40px; height: 40px; font-size: 22px; }
+.wallet-btn { height: 40px; padding: 0 13px; font-size: 13px; }
+.game-shell { width: min(100%, 520px); margin: 0 auto; padding: 18px 16px 96px; }
+.player-row { display: flex; align-items: center; justify-content: space-between; margin: 4px 0 10px; }
+.player { display: flex; align-items: center; gap: 10px; }
+.player strong { display: block; font-size: 14px; }
+.sub { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; }
+.avatar { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: #262b33; color: #b9c0ca; font-size: 12px; font-weight: 700; }
+.you-avatar { background: #2b3038; color: #fff; }
+.clock { min-width: 72px; padding: 8px 10px; border-radius: 10px; background: var(--panel); border: 1px solid var(--line); text-align: center; font-variant-numeric: tabular-nums; font-weight: 700; font-size: 15px; }
+.clock.active { border-color: #555d68; }
+.board-wrap { width: 100%; margin: 8px 0 12px; }
+.board { width: 100%; aspect-ratio: 1; display: grid; grid-template-columns: repeat(8, 1fr); border-radius: 10px; overflow: hidden; box-shadow: 0 12px 36px rgba(0,0,0,.22); }
+.square { position: relative; display: grid; place-items: center; border: 0; padding: 0; font-size: clamp(28px, 9vw, 54px); line-height: 1; cursor: pointer; user-select: none; }
+.square.light { background: var(--light); }
+.square.dark { background: var(--dark); }
+.square.selected { outline: 4px solid rgba(242,201,76,.85); outline-offset: -4px; z-index: 2; }
+.square.legal::after { content: ""; width: 18%; aspect-ratio: 1; border-radius: 50%; background: rgba(0,0,0,.24); position: absolute; }
+.square.capture::after { content: ""; position: absolute; inset: 9%; border: 4px solid rgba(0,0,0,.25); border-radius: 50%; }
+.piece { position: relative; z-index: 1; filter: drop-shadow(0 2px 1px rgba(0,0,0,.18)); }
+.white-piece { color: #fafafa; text-shadow: 0 1px 0 #777, 0 2px 2px rgba(0,0,0,.3); }
+.black-piece { color: #24272d; text-shadow: 0 1px 0 rgba(255,255,255,.18); }
+.game-status { min-height: 22px; text-align: center; color: var(--muted); font-size: 13px; margin: 8px 0; }
+.actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.secondary, .danger { height: 42px; font-size: 13px; }
+.danger { color: #ffb4b4; }
+.moves-card { margin-top: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); overflow: hidden; }
+.section-title { padding: 11px 13px; display: flex; justify-content: space-between; color: #d9dde4; font-size: 12px; border-bottom: 1px solid var(--line); }
+.section-title span:last-child { color: var(--muted); }
+.moves { max-height: 150px; overflow: auto; padding: 9px 12px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 18px; font-size: 12px; color: #c5cad2; }
+.move { display: flex; gap: 7px; }
+.move-num { color: var(--muted); min-width: 18px; }
+.bottom-nav { position: fixed; left: 0; right: 0; bottom: 0; height: 68px; display: flex; justify-content: center; gap: 42px; background: rgba(15,17,21,.94); backdrop-filter: blur(16px); border-top: 1px solid var(--line); }
+.nav-item { min-width: 48px; border: 0; background: transparent; color: var(--muted); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; }
+.nav-item.active { color: #fff; }
+.nav-item span { font-size: 18px; }
+.nav-item small { font-size: 10px; }
+@media (min-width: 700px) {
+  .bottom-nav { position: static; border: 0; background: transparent; margin-top: -70px; margin-bottom: 20px; }
+}
