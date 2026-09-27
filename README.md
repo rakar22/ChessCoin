@@ -80,3 +80,21 @@ The Play screen exposes **Find match**, which uses the realtime queue when `VITE
 ### Security boundary
 
 No wallet private keys, seed phrases or payment credentials belong in this application. TON Connect should only be used for public wallet connection/signing, and any real-value reward system must be implemented server-side with appropriate legal, fraud and custody controls.
+
+
+## Telegram bot layer
+
+The repository includes a bot command specification and production checklist for:
+
+- `/start`
+- `/play`
+- `/match`
+- `/tournaments`
+- `/profile`
+- `/help`
+
+The Mini App URL is designed to be `https://chesscoin.optia.shop`.
+
+## HTTP API
+
+The realtime server now exposes basic endpoints for health, leaderboard, player profile and tournament operations under `/api/*`.
