@@ -1,12 +1,13 @@
 import { Chess } from "chess.js";
 import "./style.css";
+import { createRealtimeClient } from "./online.js";
 
 const PIECES={w:{k:"♔",q:"♕",r:"♖",b:"♗",n:"♘",p:"♙"},b:{k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"}};
 const MODES={bullet:{name:"Bullet",time:60,increment:0},blitz:{name:"Blitz",time:180,increment:0},rapid:{name:"Rapid",time:300,increment:0}};
 const KEY="chesscoin-profile-v2";
 const DEFAULT={name:"Player",rating:1200,wins:0,losses:0,draws:0,coins:250,games:0,streak:0,lastBonus:""};
 let profile={...DEFAULT,...JSON.parse(localStorage.getItem(KEY)||"{}")};
-let mode="rapid", game=new Chess(), selected=null, targets=[], over=false, clocks={w:300,b:300}, timer=null, screen="play", result=null, sound=true;
+let mode="rapid", game=new Chess(), selected=null, targets=[], over=false, clocks={w:300,b:300}, timer=null, screen="play", result=null, sound=true, online=null, onlineRoom="", onlineColor="w", onlineState=null;
 const app=document.querySelector("#app");
 
 function save(){localStorage.setItem(KEY,JSON.stringify(profile))}
@@ -27,7 +28,7 @@ if(screen==="play")bindGame();
 function playScreen(){
 return `<main class="page">
 <section class="hero"><div><span class="eyebrow">CHESS ARENA</span><h1>Play chess.<br><em>Climb the board.</em></h1><p>Fast matches, ELO progression and virtual rewards.</p></div><div class="rating"><small>RATING</small><strong>${profile.rating}</strong></div></section>
-<section class="modes">
+<section class="online-box"><div><span class="eyebrow">ONLINE 1V1</span><strong>Play with another player</strong><small id="onlineStatus">Offline mode</small></div><div class="online-actions"><button id="createRoom">Create room</button><button id="joinRoom">Join room</button></div></section><section class="modes">
 ${Object.entries(MODES).map(([id,m])=>`<button class="mode ${mode===id?"selected":""}" data-mode="${id}"><strong>${m.name}</strong><span>${m.time/60}${m.time>=60?" min":""} · 0 inc</span></button>`).join("")}
 </section>
 ${gamePanel()}
@@ -66,7 +67,7 @@ if(piece)el.innerHTML=`<span class="piece ${piece.color}">${PIECES[piece.color][
 el.onclick=()=>squareClick(sq);b.appendChild(el);
 }));
 }
-function squareClick(sq){
+function applyOnlineState(s){if(!s?.fen)return;game=new Chess(s.fen);onlineState=s;selected=null;targets=[];renderBoard();const st=document.querySelector("#status");if(st)st.textContent=s.status==="waiting"?"Waiting for opponent…":game.turn()==="w"?"White to move":"Black to move";}\nfunction connectOnline(){if(online)return true;const client=createRealtimeClient({onHello:()=>setOnlineStatus("Connected"),onRoom:m=>{onlineRoom=m.room;onlineColor=m.color;setOnlineStatus("Room "+m.room+" · "+m.color.toUpperCase())},onState:applyOnlineState,onError:m=>{setOnlineStatus(m);online=null}});if(!client){setOnlineStatus("Set VITE_MULTIPLAYER_URL to enable online play");return false}online=client;return true}\nfunction setOnlineStatus(s){const el=document.querySelector("#onlineStatus");if(el)el.textContent=s}\nfunction squareClick(sq){
 if(over||game.turn()!=="w")return;
 if(selected&&targets.includes(sq)){
 try{game.move({from:selected,to:sq,promotion:"q"});profile.games++;selected=null;targets=[];afterMove();return}catch{}
@@ -99,7 +100,7 @@ document.querySelector("#wallet")?.addEventListener("click",()=>alert("TON Conne
 }
 function bindGame(){
 document.querySelectorAll("[data-mode]").forEach(x=>x.onclick=()=>{mode=x.dataset.mode;reset()});
-document.querySelector("#newGame")?.addEventListener("click",reset);
+document.querySelector("#newGame")?.addEventListener("click",reset);\ndocument.querySelector("#createRoom")?.addEventListener("click",()=>{if(connectOnline())online.send({type:"create",name:profile.name,rating:profile.rating})});\ndocument.querySelector("#joinRoom")?.addEventListener("click",()=>{const room=prompt("Enter room code");if(!room)return;if(connectOnline())online.send({type:"join",room:room.trim().toUpperCase(),name:profile.name,rating:profile.rating})});
 document.querySelector("#resign")?.addEventListener("click",()=>{if(!over&&confirm("Resign this game?"))finish("loss")});
 document.querySelector("#daily")?.addEventListener("click",()=>{
 const today=new Date().toISOString().slice(0,10);
